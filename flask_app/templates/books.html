@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="container">
+            <div id="header"></div>
+            <div id="content">
+                <div class="col">
+                    <h1>New Book</h1>
+                    <form action="/create_book" method="POST">
+                        <fieldset class="form">
+                            <legend>Create a new Book</legend>
+                            <label for="name">Name:</label>
+                            <input type="text" name="title" id="book_title" required>
+                            <br>
+                            <label for="name">Number of pages:</label>
+                            <input type="number" name="num_of_pages" id="num_of_pages" required>
+                            <input type="submit" value="Create">
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col">
+                    <h1>All Books</h1>
+                    <table id="book_table">
+                        {%for one_book in books %}
+                        <tr class="table_row">
+                            <td class="table_col"><a href="books/{{one_book.id}}">{{one_book.title}}</a></td>
+                            <td class="table_col">{{one_book.num_of_pages}}</td>
+                            <td class="table_col"><a href="/delete/{{one_book.id}}">Delete</a></td>
+                        </tr>
+                        {%endfor%}
+                    </table>
+                    <div class="form">
+                        <a href="/authors">Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

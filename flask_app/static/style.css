@@ -1,0 +1,38 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+#wrapper {
+    display: flex;
+    justify-content: center;
+}
+#container {
+    justify-content: center;
+}
+
+#header {
+    height: 100px;
+}
+
+#content {
+    width: 800px;
+    display: flex;
+    justify-content: space-between;
+    background-color: lightblue;
+    border: 4px solid gray;
+    padding: 10px;
+}
+
+.col {
+    width: 300px;
+}
+
+.form {
+    padding: 10px;
+    margin: 10px 0px 10px 0px;
+}
+.table_row {
+    border-bottom: 2px solid black;
+    padding: 5px 0px 5px 0px;
+}
