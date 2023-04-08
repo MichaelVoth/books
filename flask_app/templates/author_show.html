@@ -16,28 +16,37 @@
             <div id="content">
                 <div class="col">
                     <h1>{{author.name}}'s Fovortite Books</h1>
-                    <table>
-                        <thead>
-                            <th>Title</th>
-                            <th>Number of Pages</th>
-                        </thead>
-                        <tbody>
-                            {%for book in author.books%}
-                            <tr>
-                                <td>{{book.title}}</td>
-                                <td>{{book.num_of_pages}}</td>
-                            </tr>
-                            {%endfor%}
-                        </tbody>
-                    </table>
+                    {%if author == False %}
+                        <p>Author has no favorite books</p>
+                    {%else%}
+                        <table>
+                            <thead>
+                                <th>Title</th>
+                                <th>Number of Pages</th>
+                            </thead>
+                            <tbody>
+                                {%for book in author.books%}
+                                <tr>
+                                    <td>{{book.title}}</td>
+                                    <td>{{book.num_of_pages}}</td>
+                                </tr>
+                                {%endfor%}
+                            </tbody>
+                        </table>
+                    {%endif%}
+                    <a href="/authors">Home</a>
                 </div>
                 <div class="col">
                     <h1>Add Books to favorites</h1>
-                    <form>
+                    <form action="/add_favorite_book" method="POST">
+                        <input type="hidden" name="author_id" value="{{author.id}}">
                         <label for="book_id">Book:</label>
-                        <select name="">
-
+                        <select name="book_id" id="book_id" required>
+                            {%for a_book in book %}
+                            <option value="{{a_book.id}}">{{a_book.title}}</option>
+                            {%endfor%}
                         </select>
+                        <input type="submit" value="Add book">
                     </form>
 
                 </div>

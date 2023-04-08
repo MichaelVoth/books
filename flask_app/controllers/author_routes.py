@@ -20,8 +20,23 @@ def create_author():          #creates an author
 @app.route('/authors/<int:id>')
 def show_author(id):          #shows author with favorited books
     author = Author.get_books_favorited_by_author(id)
-    # nonfavorite_books = Book.book_select_all()
-    return render_template('author_show.html', author=author)
+    books = Book.book_select_all()
+    favorite_books = []
+    non_favorite_books = []
+    if author == False:
+        return render_template('author_show.html', author=author, book=non_favorite_books)
+    else:
+        for book in author.books:
+            favorite_books.append(book.id)
+        for book in books:
+            if book.id not in favorite_books:
+                non_favorite_books.append(book)
+        return render_template('author_show.html', author=author, book=non_favorite_books)
+
+@app.route("/add_favorite_book", methods=['POST'])
+def add_book_to_favorites():
+    Author.add_favorite(request.form)
+    return redirect(f"/authors/{request.form['author_id']}")
 
 @app.route('/delete/<int:id>')
 def delete_author(id):        #deletes an author
