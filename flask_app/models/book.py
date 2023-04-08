@@ -18,6 +18,13 @@ class Book:
         for book_dict in results:
             books.append(cls(book_dict))
         return books
+
+    @classmethod
+    def book_select_one(cls, id):
+        query = "SELECT * FROM books WHERE id=%(id)s"
+        results = connectToMySQL('books_schema').query_db(query, {'id': id})
+        book = cls(results[0])
+        return book
     
     @classmethod
     def book_create(cls, data):     #Adds form data to DB as new row
@@ -26,36 +33,47 @@ class Book:
         return results
     
     @classmethod
-    def get_authors_who_favorited_book(book_id):
-        query = """SELECT * 
-                    FROM authors
-                    LEFT JOIN favorites ON authors.id = favorites.author_id
+    def get_authors_who_favorited_book(cls, id):
+        query = """SELECT * FROM books
+                    LEFT JOIN favorites ON favorites.book_id = books.id
+                    LEFT JOIN authors ON authors.id = favorites.author_id
                     WHERE favorites.book_id = %(book_id)s"""
         data = {
-            "book_id": book_id
+            "book_id": id
         }
         results = connectToMySQL("books_schema").query_db(query, data)
-        authors = []
-        for author_dict in results:
-            authors.append(author.Author(author_dict))
-        return authors
+        if len(results)>0:
+            book = cls(results[0])
+            for row_from_db in results:
+                    author_data = {
+                        "id": row_from_db["authors.id"],
+                        "name": row_from_db["name"],
+                        "created_at": row_from_db["authors.created_at"],
+                        "updated_at": row_from_db["authors.updated_at"]
+                    }
+                    book.authors.append(author.Author(author_data))
+            return book
+        else:
+            book = Book.book_select_one(id)
+            return book
+        
     
-    @classmethod
-    def book_select_unfavorited(cls, author_id):
-        query = """
-            SELECT DISTINCT book_id, books.title
-            FROM books
-            LEFT JOIN favorites ON favorites.book_id = books.id
-            WHERE favorites.author_id IS NULL OR favorites.author_id != %(author_id)s;
-        """
-        data = {
-            "author_id": author_id
-        }
-        results = connectToMySQL("books_schema").query_db(query, data)
-        books = []
-        for book_dict in results:
-            books.append(cls(book_dict))
-        return books
+    # @classmethod
+    # def book_select_unfavorited(cls, author_id):
+    #     query = """
+    #         SELECT DISTINCT book_id, books.title
+    #         FROM books
+    #         LEFT JOIN favorites ON favorites.book_id = books.id
+    #         WHERE favorites.author_id IS NULL OR favorites.author_id != %(author_id)s;
+    #     """
+    #     data = {
+    #         "author_id": author_id
+    #     }
+    #     results = connectToMySQL("books_schema").query_db(query, data)
+    #     books = []
+    #     for book_dict in results:
+    #         books.append(cls(book_dict))
+    #     return books
     
     @classmethod
     def book_delete(cls, id):        #Deletes one row from DB

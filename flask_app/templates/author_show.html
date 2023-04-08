@@ -15,9 +15,9 @@
             <div id="header"></div>
             <div id="content">
                 <div class="col">
-                    <h1>{{author.name}}'s Fovortite Books</h1>
-                    {%if author == False %}
-                        <p>Author has no favorite books</p>
+                    <h1>{{author.name}}'s Favorite Books</h1>
+                    {%if author.books == []%}
+                        <p>(Author has no favorite books)</p>
                     {%else%}
                         <table>
                             <thead>
@@ -37,7 +37,7 @@
                     <a href="/authors">Home</a>
                 </div>
                 <div class="col">
-                    <h1>Add Books to favorites</h1>
+                    <h1>Add Books to Favorites</h1>
                     <form action="/add_favorite_book" method="POST">
                         <input type="hidden" name="author_id" value="{{author.id}}">
                         <label for="book_id">Book:</label>

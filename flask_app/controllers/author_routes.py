@@ -23,15 +23,13 @@ def show_author(id):          #shows author with favorited books
     books = Book.book_select_all()
     favorite_books = []
     non_favorite_books = []
-    if author == False:
-        return render_template('author_show.html', author=author, book=non_favorite_books)
-    else:
-        for book in author.books:
-            favorite_books.append(book.id)
-        for book in books:
-            if book.id not in favorite_books:
-                non_favorite_books.append(book)
-        return render_template('author_show.html', author=author, book=non_favorite_books)
+    for book in author.books:
+        favorite_books.append(book.id)
+    for book in books:
+        if book.id not in favorite_books:
+            non_favorite_books.append(book)
+    print(favorite_books)
+    return render_template('author_show.html', author=author, book=non_favorite_books)
 
 @app.route("/add_favorite_book", methods=['POST'])
 def add_book_to_favorites():
